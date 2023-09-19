@@ -1,0 +1,61 @@
+ <!DOCTYPE html>
+<html>
+<head>
+  <title>Job Search</title>
+</head>
+<body>
+  <h1>Job Search</h1>
+
+  <label for="jobPosition">Job Position:</label>
+  <input type="text" id="jobPosition" placeholder="Enter job position">
+
+  <label for="jobLocation">Job Location:</label>
+  <input type="text" id="jobLocation" placeholder="Enter job location">
+
+  <button id="searchButton">Cerca</button>
+
+  <script>
+   
+    const jobPositionInput = document.getElementById('jobPosition');
+    const jobLocationInput = document.getElementById('jobLocation');
+    const searchButton = document.getElementById('searchButton');
+
+ 
+    function handleSearch() {
+      const jobPosition = jobPositionInput.value;
+      const jobLocation = jobLocationInput.value;
+
+     
+      searchJobListings(jobPosition, jobLocation);
+    }
+
+    
+    searchButton.addEventListener('click', handleSearch);
+
+ 
+    async function searchJobListings(jobPosition, jobLocation)
+      try {
+        const response = await fetch(`https://example.com/api/joblistings?position=${encodeURIComponent(jobPosition)}&location=${encodeURIComponent(jobLocation)}`);
+
+        if (!response.ok) {
+          throw new Error('Unable to fetch job listings');
+        }
+
+        const data = await response.json();
+
+        
+        if (data.length === 0) {
+          console.log('No job listings found.');
+        } else {
+          console.log('Job Listings:');
+          data.forEach(jobListing => {
+            console.log(`- ${jobListing.title} at ${jobListing.company} (${jobListing.location})`);
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    
+  </script>
+</body>
+</html>
